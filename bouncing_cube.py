@@ -2,36 +2,43 @@ import pygame as pg
 
 pg.init()
 
+# Window settings
 win_width = 1024
 win_height = 768
-
-win = pg.display.set_mode((win_width,win_height))
-pg.display.set_caption("Bouncing Cube")
+win = pg.display.set_mode((win_width,win_height)) # Surface
+pg.display.set_caption("Bouncing Cube") # Window title
 
 # Central obstacle settings
 obst_width = win_width
 obst_height = 50
-obst_x = int((win_width/2) - (obst_width/2))
-obst_y = int((win_height/2) - (obst_height/2))
+obst_x = int((win_width/2) - (obst_width/2)) # Centering x
+obst_y = int((win_height/2) - (obst_height/2)) # Centering y
 obst = pg.Rect(obst_x, obst_y, obst_width, obst_height)
 obst_init = obst
-obst_min_width = 50
-obst_contraction = -20
+obst_min_width = 50 
+obst_contraction = -20 # Contraction level
 
-# Moving cube setting 
+# Moving cube settings 
 cube_x = 5 # Initial cube x axis
 cube_y = 5 # Initial cube y axis
 cube_size = 20
 cube = pg.Rect(cube_x, cube_y, cube_size, cube_size)
+vector = [11,20] # Cube vector direction
 
-# Cube vector direction
-vector = [11,20]
-
+#--------  Color settings
 # Color pallet
 colors = {"red":(255,0,0), "green":(0,255,0), "blue":(0,0,255), 
 "white":(255,255,255), "pink":(255,0,255), "cyan":(0,255,255),
 "yellow":(255,255,0)}
-c = colors["white"]
+
+c = colors["white"] # Cube color
+
+# 'obst' color gradient
+obst_G_color = 255 # Green color modulation
+obst_G_color_init = obst_G_color # Color benchmark
+color_steps = obst[2] - obst_min_width # Difference between 'obst' max width & min width
+color_steps = int(color_steps / abs(obst_contraction)) # Steps to reach 'obst' min width
+color_steps = int(obst_G_color/color_steps) # Decrementation value of green color gradient
 
 def witchSide(rect1, rect2):
     # Return a relative position
@@ -60,12 +67,11 @@ while run:
 
     #-------- The cube is in contact with the central obstacle
     side = witchSide(obst, cube) # Position of cube in relation to obst
-    #print(side)
 
     if side == "top" or side =="bottom": # cube is up or down obst 
         if cube.colliderect(obst): # Collision detected
             if side == "top" :
-                c = colors["yellow"]
+                c = colors["pink"]
             else :
                 c = colors["cyan"]
             vector[1] = -vector[1] # Inverting the y vector
@@ -86,10 +92,12 @@ while run:
     if cube_x < 0 or cube_x > win_width - cube_size: #Side edges of the window
         c = colors["white"]
         vector[0] = -vector[0] # Inverting x vector
-        if obst[2] > obst_min_width: # While 'obst' width is greater than 'min_obst_width'
+        if obst[2] > obst_min_width: # While 'obst' width is greater than 'obst_min_width'
             obst.inflate_ip(obst_contraction,0) # 'obst' width contraction (-x)
-        else : # 'obst' width is smaller or equal than 'min_obst_width'
+            obst_G_color -= color_steps
+        else : # 'obst' width is smaller or equal than 'obst_min_width'
             obst.inflate_ip(win_width-obst[2], 0) # 'obst' returns to its original width (+x)
+            obst_G_color = obst_G_color_init
 
     # Up side or down side
     if cube_y < 0 or cube_y > win_height - cube_size:
@@ -97,12 +105,14 @@ while run:
         vector[1] = -vector[1] # Inverting y vector
         if obst[2] > obst_min_width:
             obst.inflate_ip(obst_contraction,0)
+            obst_G_color -= color_steps
         else :
             obst.inflate_ip(win_width-obst[2], 0)
+            obst_G_color = obst_G_color_init
 
     #-------- Drawing
     win.fill((0,0,0))
-    pg.draw.rect(win, (255,255,255), obst)
+    pg.draw.rect(win, (255, obst_G_color, 0), obst)
     pg.draw.rect(win, c, cube)
     cube.move_ip(vector[0], vector[1])
     pg.display.update()
