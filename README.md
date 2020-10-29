@@ -13,3 +13,4 @@ it returns to its original size
 ![Mosa](https://user-images.githubusercontent.com/11463619/97628998-bf48c580-1a2d-11eb-9508-5e25deec3d4a.jpg)
 
 ### Infos display
+![infos](https://user-images.githubusercontent.com/11463619/97629020-c4a61000-1a2d-11eb-87cd-ef8854dac023.png)
