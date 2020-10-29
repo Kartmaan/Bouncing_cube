@@ -9,3 +9,7 @@ it returns to its original size
 - Real-time information can be displayed at the top left of the window (cube coordinates, obstacle width, vector etc. [Set "infoDisplay" to True)
 
 ## Screenshots
+### Animation mosaic
+![Mosa](https://user-images.githubusercontent.com/11463619/97628998-bf48c580-1a2d-11eb-9508-5e25deec3d4a.jpg)
+
+### Infos display
