@@ -1,6 +1,9 @@
 import pygame as pg
 from math import sqrt
 
+__author__ = "Kartmaan"
+__version__ = "1.0"
+
 pg.init()
 
 #-------- Window settings (1027x768)
