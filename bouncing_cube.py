@@ -6,8 +6,8 @@ __version__ = "1.0"
 
 pg.init()
 
-#-------- Window settings (1027x768)
-win_width = 1027
+#-------- Window settings (1024x768)
+win_width = 1024
 win_height = 768
 win_res = win_width * win_height
 win = pg.display.set_mode((win_width,win_height)) # Surface
