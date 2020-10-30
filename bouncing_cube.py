@@ -21,20 +21,22 @@ font = pg.font.Font(None,20)
 
 #--------  Object settings
 # Central obstacle settings
+# The proportion values were obtained from a screen size of 1024x768
 obst_width = win_width
-obst_height = int(win_height/15.36)
+obst_height = int(win_height/15.36) # The obstacle height is proportional to the window height
 obst_x = int((win_width/2) - (obst_width/2)) # Centering x
 obst_y = int((win_height/2) - (obst_height/2)) # Centering y
-obst_min_width = int(win_width/20.48)
+obst_min_width = int(win_width/20.48) # The obstacle min width is proportional to the window width
 obst_contraction = int(obst_width/obst_min_width) 
 obst_contraction = -obst_contraction # Contraction level
 obst = pg.Rect(obst_x, obst_y, obst_width, obst_height)
 
-# Moving cube settings 
+# Moving cube settings
+# The proportion values were obtained from a screen size of 1024x768
 cube_x = 5 # Initial cube x axis
 cube_y = 5 # Initial cube y axis
-cube_size = int(win_res/1966.08)
-cube_size = int(sqrt(cube_size))
+cube_size = int(win_res/1966.08) # The cube area is proportional to the window area
+cube_size = int(sqrt(cube_size)) # The square root of the cube area gives the value of his side
 cube = pg.Rect(cube_x, cube_y, cube_size, cube_size)
 vector = [16,20] # Cube vector direction
 
@@ -108,10 +110,10 @@ while run:
         vector[0] = -vector[0] # Inverting x vector
         if obst[2] > obst_min_width: # While 'obst' width is greater than 'obst_min_width'
             obst.inflate_ip(obst_contraction,0) # 'obst' width contraction (-x)
-            obst_G_color -= color_steps
+            obst_G_color -= color_steps # Decrement the G value of the RGB of 'obst'
         else : # 'obst' width is smaller or equal than 'obst_min_width'
             obst.inflate_ip(win_width-obst[2], 0) # 'obst' returns to its original width (+x)
-            obst_G_color = obst_G_color_init
+            obst_G_color = obst_G_color_init # 'obst' returns to its original color
 
     # Up side or down side
     if cube_y < 0 or cube_y > win_height - cube_size:
