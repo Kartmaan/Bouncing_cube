@@ -6,11 +6,11 @@ A cube bounces against the edges of the window and against a central obstacle wh
 - Each time the cube comes in contact with an edge of the screen, the width of the central obstacle contracts a notch. The obstacle continues to contract to a minimum before 
 it returns to its original size
 - The initial color of the obstacle changes color as it contracts
-- Real-time information can be displayed at the top left of the window (cube coordinates, obstacle width, vector etc. [Set "infoDisplay" to True)
+- Real-time information can be displayed at the top left of the window (cube coordinates, obstacle width, vector etc. [Set `infoDisplay` to True)
 
 ## Screenshots
 ### Animation mosaic
-![Mosa](https://user-images.githubusercontent.com/11463619/97628998-bf48c580-1a2d-11eb-9508-5e25deec3d4a.jpg)
+![bouncing](https://user-images.githubusercontent.com/11463619/97807740-dcb2a500-1c62-11eb-8fbd-18d26d138d20.jpg)
 
 ### Infos display
-![infos](https://user-images.githubusercontent.com/11463619/97629020-c4a61000-1a2d-11eb-87cd-ef8854dac023.png)
+![bouncing_info](https://user-images.githubusercontent.com/11463619/97807743-e20fef80-1c62-11eb-819d-89c5786ad166.jpg)
