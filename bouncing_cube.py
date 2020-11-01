@@ -1,9 +1,9 @@
-import pygame as pg
 from math import sqrt
+import pygame as pg
 
 __author__ = "Kartmaan"
-__version__ = "1.0"
-
+__version__ = "1.5"
+   
 pg.init()
 
 #-------- Window settings (1024x768)
@@ -16,8 +16,12 @@ refresh = 20
 
 #--------  Info text settings
 infoDisplay = False # Show info or not
-font = pg.font.Font(None,20)
-#stats_sep = 15
+font = pg.font.Font(None,20) # Default font, size 20
+
+#-------- Backround settings
+back = pg.image.load("back.png").convert()
+back = pg.transform.scale(back, (win_width, win_height))
+back.set_alpha(100)
 
 #--------  Object settings
 # Central obstacle settings
@@ -68,10 +72,20 @@ def witchSide(rect1, rect2):
     else:
         return "bottom"
 
+#--------  Variables
+collision = False
+edge_collisions = 0
+obst_collisions = 0
+total_collisions = 0
+
 #--------  Animation loop
+clock = pg.time.Clock
+fps = clock()
+
 run = True
 while run:
-    pg.time.delay(20) # Refresh ferequency
+    #pg.time.delay(20) # Refresh ferequency
+    fps.tick(40) # Frame per second
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
@@ -86,6 +100,7 @@ while run:
 
     if side == "top" or side =="bottom": # cube is up or down obst 
         if cube.colliderect(obst): # Collision detected
+            obst_collisions += 1
             if side == "top" :
                 cube_color = colors["pink"]
             else :
@@ -94,6 +109,7 @@ while run:
     
     if side == "left" or side =="right": # cube is to the left or right of obst
         if cube.colliderect(obst):
+            obst_collisions += 1
             if side == "top" :
                 cube_color = colors["red"]
             else :
@@ -106,6 +122,7 @@ while run:
 
     # Left side or right side
     if cube_x < 0 or cube_x > win_width - cube_size: #Side edges of the window
+        edge_collisions += 1
         cube_color = colors["white"]
         vector[0] = -vector[0] # Inverting x vector
         if obst[2] > obst_min_width: # While 'obst' width is greater than 'obst_min_width'
@@ -117,6 +134,7 @@ while run:
 
     # Up side or down side
     if cube_y < 0 or cube_y > win_height - cube_size:
+        edge_collisions += 1
         cube_color = colors["yellow"]
         vector[1] = -vector[1] # Inverting y vector
         if obst[2] > obst_min_width:
@@ -126,6 +144,8 @@ while run:
             obst.inflate_ip(win_width-obst[2], 0)
             obst_G_color = obst_G_color_init
 
+    total_collisions = obst_collisions + edge_collisions
+
     #-------- Info display
     if infoDisplay == True:
         #-------- General info
@@ -134,10 +154,10 @@ while run:
         win_size_text = font.render(win_size_text, True, (colors["white"]))
         win_size_text_rect = win_size_text.get_rect()
 
-        # Refresh frequency
-        refresh_text = "Refresh freq. : {}".format(refresh)
-        refresh_text = font.render(refresh_text, True, (colors["white"]))
-        refresh_text_rect = refresh_text.get_rect()
+        # Frame per second
+        fps_text = "FPS : {}".format(round(fps.get_fps(), 2))
+        fps_text = font.render(fps_text, True, (colors["white"]))
+        fps_text_rect = fps_text.get_rect()
 
         #-------- Cube info
         # Cube position (x,y)
@@ -181,8 +201,23 @@ while run:
         obst_color_text = font.render(obst_color_text, True, (colors["white"]))
         obst_color_text_rect = obst_color_text.get_rect()
 
+        #-------- Collisions info
+        edge_collisions_text = "Edge collisions : {}".format(edge_collisions)
+        edge_collisions_text = font.render(edge_collisions_text, True, (colors["white"]))
+        edge_collisions_text_rect = edge_collisions_text.get_rect()
+
+        obst_collisions_text = "Obst. collisions : {}".format(obst_collisions)
+        obst_collisions_text = font.render(obst_collisions_text, True, (colors["white"]))
+        obst_collisions_text_rect = obst_collisions_text.get_rect()
+
+        total_collisions_text = "Total collisions : {}".format(total_collisions)
+        total_collisions_text = font.render(total_collisions_text, True, (colors["white"]))
+        total_collisions_text_rect = total_collisions_text.get_rect()
+
     #-------- Drawing
     win.fill((0,0,0))
+
+    win.blit(back, (0,0))
     pg.draw.rect(win, (255, obst_G_color, 0), obst)
     pg.draw.rect(win, cube_color, cube)
     cube.move_ip(vector[0], vector[1])
@@ -190,7 +225,7 @@ while run:
     # Info texts drawing
     if infoDisplay == True:
         win.blit(win_size_text, (0,0), win_size_text_rect)
-        win.blit(refresh_text, (0,15), refresh_text_rect)
+        win.blit(fps_text, (0,15), fps_text_rect)
 
         win.blit(cube_pos_text, (0,45), cube_pos_text_rect)
         win.blit(vect_text, (0,60), vect_text_rect)
@@ -201,6 +236,10 @@ while run:
         win.blit(obst_width_text, (0,135), obst_width_text_rect)
         win.blit(obst_height_text, (0,150), obst_height_text_rect)
         win.blit(obst_color_text, (0,165), obst_color_text_rect)
+
+        win.blit(edge_collisions_text, (0,195), edge_collisions_text_rect)
+        win.blit(obst_collisions_text, (0,210), obst_collisions_text_rect)
+        win.blit(total_collisions_text, (0,225), total_collisions_text_rect)
         
     pg.display.update()
 
