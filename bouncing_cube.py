@@ -74,9 +74,9 @@ def witchSide(rect1, rect2):
 
 #--------  Variables
 collision = False
-edge_collisions = 0
-obst_collisions = 0
-total_collisions = 0
+edge_collision = 0
+obst_collision = 0
+total_collision = 0
 
 #--------  Animation loop
 clock = pg.time.Clock
@@ -100,7 +100,7 @@ while run:
 
     if side == "top" or side =="bottom": # cube is up or down obst 
         if cube.colliderect(obst): # Collision detected
-            obst_collisions += 1
+            obst_collision += 1
             if side == "top" :
                 cube_color = colors["pink"]
             else :
@@ -109,7 +109,7 @@ while run:
     
     if side == "left" or side =="right": # cube is to the left or right of obst
         if cube.colliderect(obst):
-            obst_collisions += 1
+            obst_collision += 1
             if side == "top" :
                 cube_color = colors["red"]
             else :
@@ -122,7 +122,7 @@ while run:
 
     # Left side or right side
     if cube_x < 0 or cube_x > win_width - cube_size: #Side edges of the window
-        edge_collisions += 1
+        edge_collision += 1
         cube_color = colors["white"]
         vector[0] = -vector[0] # Inverting x vector
         if obst[2] > obst_min_width: # While 'obst' width is greater than 'obst_min_width'
@@ -134,7 +134,7 @@ while run:
 
     # Up side or down side
     if cube_y < 0 or cube_y > win_height - cube_size:
-        edge_collisions += 1
+        edge_collision += 1
         cube_color = colors["yellow"]
         vector[1] = -vector[1] # Inverting y vector
         if obst[2] > obst_min_width:
@@ -144,7 +144,7 @@ while run:
             obst.inflate_ip(win_width-obst[2], 0)
             obst_G_color = obst_G_color_init
 
-    total_collisions = obst_collisions + edge_collisions
+    total_collision = obst_collision + edge_collision
 
     #-------- Info display
     if infoDisplay == True:
@@ -202,15 +202,15 @@ while run:
         obst_color_text_rect = obst_color_text.get_rect()
 
         #-------- Collisions info
-        edge_collisions_text = "Edge collisions : {}".format(edge_collisions)
+        edge_collisions_text = "Edge collision : {}".format(edge_collision)
         edge_collisions_text = font.render(edge_collisions_text, True, (colors["white"]))
         edge_collisions_text_rect = edge_collisions_text.get_rect()
 
-        obst_collisions_text = "Obst. collisions : {}".format(obst_collisions)
+        obst_collisions_text = "Obst. collision : {}".format(obst_collision)
         obst_collisions_text = font.render(obst_collisions_text, True, (colors["white"]))
         obst_collisions_text_rect = obst_collisions_text.get_rect()
 
-        total_collisions_text = "Total collisions : {}".format(total_collisions)
+        total_collisions_text = "Total collision : {}".format(total_collision)
         total_collisions_text = font.render(total_collisions_text, True, (colors["white"]))
         total_collisions_text_rect = total_collisions_text.get_rect()
 
