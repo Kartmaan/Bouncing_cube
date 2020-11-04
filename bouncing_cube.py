@@ -1,26 +1,33 @@
 __author__ = "Kartmaan"
-__version__ = "1.6"
+__version__ = "1.6.1"
 
 import os
 import time
+from random import randint, choice
 from math import sqrt
 
 import pygame as pg
+from pygame import color
    
 pg.init()
 
-#-------- Window settings (1024x768)
+#-------- Window settings
 # Get the monitor size
 monitor_w = pg.display.Info().current_w # Monitor width
 monitor_h = pg.display.Info().current_h # Monitor height
+fullscreen = False
 
 # Scaling the window size
-win_width = int(monitor_w/2)
-win_height = int(monitor_h/1.5)
+if fullscreen:
+    win_width = monitor_w
+    win_height = monitor_h
+else:
+    win_width = int(monitor_w/2)
+    win_height = int(monitor_h/1.5)
 
 # Centering the window
-center_x = (monitor_w/2) - (win_width/2)
-center_y = (monitor_h/2) - (win_height/2)
+#center_x = (monitor_w/2) - (win_width/2)
+#center_y = (monitor_h/2) - (win_height/2)
 #os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (center_x,center_y)
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
@@ -38,8 +45,8 @@ back = pg.transform.scale(back, (win_width, win_height)) # Resize
 back.set_alpha(100) # Opacity
 
 #--------  Object settings
+"""All the proportion values were obtained from a window size of 1024x768"""
 # Central obstacle settings
-# The proportion values were obtained from a screen size of 1024x768
 obst_width = win_width
 obst_height = int(win_height/15.36) # The obstacle height is proportional to the window height
 obst_x = int((win_width/2) - (obst_width/2)) # Centering x
@@ -50,7 +57,6 @@ obst_contraction = -obst_contraction # Contraction level
 obst = pg.Rect(obst_x, obst_y, obst_width, obst_height)
 
 # Moving cube settings
-# The proportion values were obtained from a screen size of 1024x768
 cube_x = 5 # Initial cube x axis
 cube_y = 5 # Initial cube y axis
 cube_size = int(win_res/1966.08) # The cube area is proportional to the window area
@@ -62,7 +68,7 @@ vector = [14,18] # Cube vector direction
 # Color pallet
 colors = {"red":(255,0,0), "green":(0,255,0), "blue":(0,0,255), 
 "white":(255,255,255), "pink":(255,0,255), "cyan":(0,255,255),
-"yellow":(255,255,0), "orange":(255, 143, 87)}
+"yellow":(255,255,0), "orange":(255, 143, 87), "black":(0,0,0)}
 
 cube_color = colors["white"] # Cube color
 
@@ -77,11 +83,13 @@ color_steps = int(obst_G_color/color_steps) # Decrementation value of green colo
 edge_collision = 0
 obst_collision = 0
 total_collision = 0
+collision_bug = 0 # Collision bug counter
 b = 5 # coordinate bias (Adjustment of the hitbox) 
-speed_limit = 0.05 # Minimum time allowed between collisions  
+speed_limit = 0.05 # Minimum time allowed between collisions
+time_after_bug = 1  
 tooFast = False # Collision bug flag
 time_ctrl = [] # Stores the time of each collision on the central obstacle 
-collision_bug = 0 # Collision bug counter
+
 
 #--------  Animation control
 clock = pg.time.Clock
@@ -126,7 +134,7 @@ while run:
     if keys[pg.K_SPACE] :
         fps_val = fps_val_init # Back fps to default value
     
-    #-------- Vertorial direction
+    #-------- Vectorial direction
     cube_x += vector[0]
     cube_y += vector[1]
 
@@ -154,8 +162,8 @@ while run:
             vector[0] = -vector[0] # Inverting the x vector
 
     #-------- The cube is in contact with an edge of the surface
-    # Each time the cube comes into contact with an edge of the surface, 
-    # "obst" contracts to a minimum before returning to its initial size.
+    """ Each time the cube comes into contact with an edge of the surface,
+    "obst" contracts to a minimum before returning to its initial size."""
 
     # Left side or right side
     if cube_x < 0+b*2 or cube_x > win_width+b - cube_size: #Side edges of the window
@@ -189,7 +197,7 @@ while run:
 
     total_collision = obst_collision + edge_collision
 
-    #-------- Info display
+    #----------------------  Info display ----------------------
     if infoDisplay:
         #-------- General info
         # Window size
@@ -205,67 +213,98 @@ while run:
         #-------- Cube info
         # Cube position (x,y)
         cube_pos_text = "Cube pos. : (x:{}, y:{})".format(cube_x, cube_y)
-        cube_pos_text = font.render(cube_pos_text, True, (colors["white"]))
+        cube_pos_text = font.render(cube_pos_text, 
+                                    True, 
+                                    (colors["white"]))                            
         cube_pos_text_rect = cube_pos_text.get_rect()
 
         # Cube vector
         vect_text = "Cube vector : [{}, {}]".format(vector[0], vector[1])
-        vect_text = font.render(vect_text, True, (colors["white"]))
+        vect_text = font.render(vect_text, 
+                                True, 
+                                (colors["white"]))
         vect_text_rect = vect_text.get_rect()
 
         # Cube relative position
         side_text = "Cube relat. pos. : {}".format(side)
-        side_text = font.render(side_text, True, (colors["white"]))
+        side_text = font.render(side_text, 
+                                True, 
+                                (colors["white"]))
         side_text_rect = side_text.get_rect()
 
         # Cube size
         cube_size_text = "Cube size : {}".format(cube_size)
-        cube_size_text = font.render(cube_size_text, True, (colors["white"]))
+        cube_size_text = font.render(cube_size_text, 
+                                    True, 
+                                    (colors["white"]))
         cube_size_text_rect = cube_size_text.get_rect()
 
         # Cube color
         cube_color_text = "Cube color : {}".format(cube_color)
-        cube_color_text = font.render(cube_color_text, True, (colors["white"]))
+        cube_color_text = font.render(cube_color_text, 
+                                     True, 
+                                     (colors["white"]))
         cube_color_text_rect = cube_color_text.get_rect()
 
         #-------- Obstacle info
         # Central obstacle width
-        obst_width_text = "Obst. width/min : {}/{}".format(obst[2], obst_min_width)
-        obst_width_text = font.render(obst_width_text, True, (colors["white"]))
+        obst_width_text = "Obst. width/min : {}/{}".format(obst[2], 
+                                                    obst_min_width)
+        obst_width_text = font.render(obst_width_text, 
+                                     True, 
+                                     (colors["white"]))
         obst_width_text_rect = obst_width_text.get_rect()
 
         # Central obstacle height
         obst_height_text = "Obst. height : {}".format(obst_height)
-        obst_height_text = font.render(obst_height_text, True, (colors["white"]))
+        obst_height_text = font.render(obst_height_text, 
+                                     True, 
+                                     (colors["white"]))
         obst_height_text_rect = obst_height_text.get_rect()
 
         # Central obstacle color
         obst_color_text = "Obst color : (255,{},0)".format(obst_G_color)
-        obst_color_text = font.render(obst_color_text, True, (colors["white"]))
+        obst_color_text = font.render(obst_color_text, 
+                                     True, 
+                                     (colors["white"]))
         obst_color_text_rect = obst_color_text.get_rect()
 
         #-------- Collisions info
+        # Edge collision
         edge_collisions_text = "Edge collision : {}".format(edge_collision)
-        edge_collisions_text = font.render(edge_collisions_text, True, (colors["white"]))
+        edge_collisions_text = font.render(edge_collisions_text, 
+                                          True, 
+                                          (colors["white"]))
         edge_collisions_text_rect = edge_collisions_text.get_rect()
 
+        # Obstacle collision
         obst_collisions_text = "Obst. collision : {}".format(obst_collision)
-        obst_collisions_text = font.render(obst_collisions_text, True, (colors["white"]))
+        obst_collisions_text = font.render(obst_collisions_text, 
+                                           True, 
+                                           (colors["white"]))
         obst_collisions_text_rect = obst_collisions_text.get_rect()
 
+        # Total collision
         total_collisions_text = "Total collision : {}".format(total_collision)
-        total_collisions_text = font.render(total_collisions_text, True, (colors["white"]))
+        total_collisions_text = font.render(total_collisions_text, 
+                                            True, 
+                                            (colors["white"]))
         total_collisions_text_rect = total_collisions_text.get_rect()
 
+        # Collision bug
         collision_bug_text = "Collision bug : {}".format(collision_bug)
         if collision_bug == 0 :
-            collision_bug_text = font.render(collision_bug_text, True, (colors["green"]))
+            collision_bug_text = font.render(collision_bug_text, 
+                                            True, 
+                                            (colors["green"]))
         else :
-            collision_bug_text = font.render(collision_bug_text, True, (colors["red"]))
+            collision_bug_text = font.render(collision_bug_text, 
+                                            True, 
+                                            (colors["red"]))
         collision_bug_text_rect = collision_bug_text.get_rect()
 
     #-------- Drawing
-    win.fill((0,0,0))
+    win.fill(colors["black"])
 
     win.blit(back, (0,0)) # Background
     pg.draw.rect(win, (255, obst_G_color, 0), obst)
@@ -296,25 +335,37 @@ while run:
     """When a corner of the cube collides with a corner of 
     the central obstacle, the cube performs rapid micro-rebounds 
     there. In order to avoid this, when the time between two 
-    bounces on the obstacle is too fast (aberrant result), 
+    bounces on the obstacle is too fast (<speed_limit), 
     the cube teleports to the top left of the window to resume 
-    its course."""
+    its course. 
+    
+    To do this, each time the cube collides on the 
+    central obstacle the time is recovered and added to the 
+    time_ctrl list, the values of this list are then checked 
+    pair by pair in order to check if they are not too close."""
 
     if len(time_ctrl) >= 2 and tooFast == False:
         laps = time_ctrl[len(time_ctrl)-1] - time_ctrl[len(time_ctrl)-2]
         if laps < speed_limit: 
             bug_time = time.time()
             collision_bug +=1
-            cube_x = 5 # Cube x axis teleportation
-            cube_y = 5 # Cube y axis teleportation
+            cube_x = (randint(5,25)) # Cube x axis teleportation
+            cube_y = (randint(5,25)) # Cube y axis teleportation
             cube = pg.Rect(cube_x, cube_y, cube_size, cube_size) # Creating a new cube
             pg.draw.rect(win, cube_color, cube) # Draw the cube
             vector[0] = abs(vector[0])
             vector[1] = abs(vector[1])
             
             tooFast = True
+    
+    if tooFast:
+        """ After a collision bug, the cube randomly changes color for 
+        'time_after_bug' second """
+        cube_color = choice(list(colors.values()))
 
-    if tooFast and time.time() > bug_time + 1: # 1sec after bug_time
+    if tooFast and time.time() > bug_time + time_after_bug: # 1sec after bug_time
+        """In order to prevent the program from oscillating in tooFast=True, 
+        we mark a time so that the next time value of time_ctrl is more spaced"""
         tooFast = False
         time_ctrl.append(time.time())
 
