@@ -367,7 +367,7 @@ while run:
         cube_color = choice(list(colors.values()))
 
     if tooFast and time.time() > bug_time + time_after_bug: # 1sec after bug_time
-        """In order to prevent the program from oscillating in tooFast=True, 
+        """In order to prevent the program from oscillating in tooFast mode, 
         we mark a time so that the next time value of time_ctrl is more spaced"""
         tooFast = False
         time_ctrl.append(time.time())
