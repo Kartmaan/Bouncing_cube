@@ -1,4 +1,4 @@
-# Bouncing_cube
+# Bouncing_cube 1.6.1
 
 ## What does the program do ?
 - A cube bounces against the edges of the window and against a central obstacle which contracts little by little
