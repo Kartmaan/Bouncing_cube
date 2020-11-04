@@ -190,7 +190,7 @@ while run:
     total_collision = obst_collision + edge_collision
 
     #-------- Info display
-    if infoDisplay == True:
+    if infoDisplay:
         #-------- General info
         # Window size
         win_size_text = "Win. size : ({}x{})".format(win_width, win_height)
@@ -273,7 +273,7 @@ while run:
     cube.move_ip(vector[0], vector[1])
 
     # Info texts drawing
-    if infoDisplay == True:
+    if infoDisplay:
         win.blit(win_size_text, (0,0), win_size_text_rect)
         win.blit(fps_text, (0,15), fps_text_rect)
 
@@ -314,7 +314,7 @@ while run:
             
             tooFast = True
 
-    if tooFast == True and time.time() > bug_time + 1: # 1sec after bug_time
+    if tooFast and time.time() > bug_time + 1: # 1sec after bug_time
         tooFast = False
         time_ctrl.append(time.time())
 
