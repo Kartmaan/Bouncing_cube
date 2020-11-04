@@ -1,10 +1,11 @@
+__author__ = "Kartmaan"
+__version__ = "1.6"
+
 import os
 import time
 from math import sqrt
-import pygame as pg
 
-__author__ = "Kartmaan"
-__version__ = "1.6"
+import pygame as pg
    
 pg.init()
 
