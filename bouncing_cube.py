@@ -90,7 +90,6 @@ time_after_bug = 1
 tooFast = False # Collision bug flag
 time_ctrl = [] # Stores the time of each collision on the central obstacle 
 
-
 #--------  Animation control
 clock = pg.time.Clock
 fps = clock()
@@ -171,11 +170,13 @@ while run:
         edge_collision += 1
         cube_color = colors["white"]
         vector[0] = -vector[0] # Inverting x vector
+         
         if obst[2] > obst_min_width: # While 'obst' width is greater than 'obst_min_width'
             obst.inflate_ip(obst_contraction,0) # 'obst' width contraction (-x)
             obst_G_color -= color_steps # Decrement the G value of the RGB of 'obst'
             if obst_G_color < 0 : # Avoid negative number in RGB
                 obst_G_color = 0
+                  
         else : # 'obst' width is smaller or equal than 'obst_min_width'
             obst.inflate_ip(win_width-obst[2], 0) # 'obst' returns to its original width (+x)
             obst_G_color = obst_G_color_init # 'obst' returns to its original color
@@ -186,11 +187,13 @@ while run:
         edge_collision += 1
         cube_color = colors["yellow"]
         vector[1] = -vector[1] # Inverting y vector
+         
         if obst[2] > obst_min_width:
             obst.inflate_ip(obst_contraction,0)
             obst_G_color -= color_steps
             if obst_G_color < 0 : # Avoid negative number in RGB
                 obst_G_color = 0
+                  
         else :
             obst.inflate_ip(win_width-obst[2], 0)
             obst_G_color = obst_G_color_init
