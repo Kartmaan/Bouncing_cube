@@ -76,16 +76,16 @@ color_steps = int(obst_G_color/color_steps) # Decrementation value of green colo
 edge_collision = 0
 obst_collision = 0
 total_collision = 0
-b = 5 # coordinate bias
-speed_limit = 0.05
-tooFast = False
-time_ctrl = []
+b = 5 # coordinate bias (Adjustment of the hitbox) 
+speed_limit = 0.05 # Minimum time allowed between collisions  
+tooFast = False # Collision bug flag
+time_ctrl = [] # Stores the time of each collision on the central obstacle 
 collision_bug = 0 # Collision bug counter
 
 #--------  Animation control
 clock = pg.time.Clock
 fps = clock()
-fps_val = 40
+fps_val = 40 # Frame per second value 
 fps_val_init = fps_val
 
 #--------  Function
@@ -301,7 +301,7 @@ while run:
 
     if len(time_ctrl) >= 2 and tooFast == False:
         laps = time_ctrl[len(time_ctrl)-1] - time_ctrl[len(time_ctrl)-2]
-        if laps < speed_limit:
+        if laps < speed_limit: 
             bug_time = time.time()
             collision_bug +=1
             cube_x = 5 # Cube x axis teleportation
