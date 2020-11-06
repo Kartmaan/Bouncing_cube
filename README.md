@@ -3,7 +3,7 @@
 ## What does the program do ?
 - A cube bounces against the edges of the window and against a central obstacle which contracts little by little
 - The cube changes color depending on the location of its collision (upper/lower edges of the window, side edges of the window, over/under the central obstacle, etc.)
-- Each time the cube comes in contact with an edge of the screen, the width of the central obstacle contracts a notch. The obstacle continues to contract to a minimum before it returns to its original size
+- Each time the cube comes in contact with an edge of the window, the width of the central obstacle contracts a notch. The obstacle continues to contract to a minimum before it returns to its original size
 - The initial color of the obstacle changes color as it contracts
 - The animation speed can be controlled by pressing up arrow (speed ++) or pressing down arrow (speed --), the initial speed can be retrieved by pressing space
 - Real-time information can be displayed at the top left of the window (cube coordinates, obstacle width, vector etc. (Set `infoDisplay` to True)
