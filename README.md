@@ -14,3 +14,6 @@
 
 ### Infos display
 ![bouncing_info](https://user-images.githubusercontent.com/11463619/97807743-e20fef80-1c62-11eb-819d-89c5786ad166.jpg)
+
+## Requirements :
+- `pygame`
